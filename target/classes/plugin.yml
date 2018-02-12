@@ -1,0 +1,6 @@
+name: CoreWars
+main: io.teamplayer.corewars.CoreWars
+version: 1
+depend: ['TeamCore']
+commands:
+  start:

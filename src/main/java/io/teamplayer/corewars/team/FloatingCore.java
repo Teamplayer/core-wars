@@ -56,7 +56,7 @@ class FloatingCore {
         armorStand = ((ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND));
 
         armorStand.setVisible(false);
-        armorStand.setHelmet(new ItemStack(Material.WOOL, 1, respawnCore.getVisualTeam().getType().getData()));
+        armorStand.setHelmet(new ItemStack(respawnCore.getVisualTeam().getType().getWoolType()));
 
         floatingCores.add(this);
     }

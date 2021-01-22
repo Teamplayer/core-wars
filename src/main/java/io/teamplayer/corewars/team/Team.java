@@ -5,7 +5,9 @@ import io.teamplayer.corewars.util.BlockFindingUtil;
 import io.teamplayer.corewars.util.LocationArea;
 import io.teamplayer.corewars.util.LocationUtil;
 import org.apache.commons.lang.ArrayUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 import java.util.*;
@@ -52,7 +54,7 @@ public class Team {
         teamData.getColoredBlocks().stream()
                 .map(BlockFindingUtil::findExact)
                 .flatMap(Collection::stream)
-                .forEach(b -> b.setData(type.getData()));
+                .forEach(b -> b.setType(teamType.getWoolType()));
 
         stealDetectionArea = new StealDetectionArea(teamData.getCaptureArea(), this);
         returnArea = new CaptureDetectionArea(teamData.getCaptureArea(), this);
@@ -96,11 +98,10 @@ public class Team {
         return getActivePlayers().size() <= 0;
     }
 
-    public byte getAmountOfActiveCores() {
-        return (byte) Arrays.stream(pedestals)
+    public int getAmountOfActiveCores() {
+        return (int) Arrays.stream(pedestals)
                 .map(CorePedestal::getEquippedCore)
                 .filter(Optional::isPresent)
-                .map(Optional::get)
                 .count();
     }
 
@@ -206,5 +207,15 @@ public class Team {
                 .filter(CorePedestal::hasCore)
                 .findFirst()
                 .get();
+    }
+
+    /**
+     * Get rid of the barriers that block players into the boat
+     */
+    public void dropBarriers() {
+        teamData.getStartingBarriers().stream()
+                .map(BlockFindingUtil::findExact)
+                .flatMap(Collection::stream)
+                .forEach(b -> b.setType(Material.AIR));
     }
 }

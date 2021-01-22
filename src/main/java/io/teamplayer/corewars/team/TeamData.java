@@ -18,7 +18,7 @@ public class TeamData {
     /** All of the blocks that can change color and are related to a team */
     private final ImmutableSet<Block> coloredBlocks;
 
-    /** The team's treasure chest */
+    /** The team's pedestals for the cores*/
     private final ImmutableSet<Block> pedestals;
 
     /** Locations where the fireworks spawn for the team */

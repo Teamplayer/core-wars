@@ -28,8 +28,8 @@ public class TimeRemainingLine extends ScoreboardLine {
         final StringBuilder message = new StringBuilder(ChatColor.WHITE.toString());
 
         if (linkedTask.getSecondsRemaining() > 60) {
-            message.append((Integer.toString((int) Math.ceil(
-                    linkedTask.getSecondsRemaining() / 60)))).append("m ");
+            message.append(((int) Math.ceil(
+                    linkedTask.getSecondsRemaining() / 60))).append("m ");
         }
 
         message.append(linkedTask.getSecondsRemaining() % 60)

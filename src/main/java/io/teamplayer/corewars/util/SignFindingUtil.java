@@ -33,9 +33,10 @@ public final class SignFindingUtil {
         return Arrays.stream(world.getLoadedChunks())
                 .flatMap(c -> Arrays.stream(c.getTileEntities()))
                 .map(BlockState::getBlock)
-                .filter(b -> b.getType() == Material.SIGN_POST ||
-                        b.getType() == Material.SIGN ||
-                        b.getType() == Material.WALL_SIGN)
+                .filter(b -> b.getType() == Material.OAK_SIGN ||
+                        b.getType() == Material.OAK_WALL_SIGN ||
+                        b.getType() == Material.LEGACY_SIGN)
+
                 .collect(Collectors.toList());
     }
 

@@ -2,11 +2,16 @@ package io.teamplayer.corewars.map;
 
 import io.teamplayer.corewars.util.DirectionUtil;
 import io.teamplayer.teamcore.immutable.ImmutableLocation;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.type.WallSign;
+import org.bukkit.craftbukkit.v1_16_R3.block.impl.CraftWallSign;
 
 import java.util.Arrays;
 
@@ -40,18 +45,27 @@ class ConfigSign {
      * @throws IllegalArgumentException when a block is passed in that isn't a sign
      */
     static ConfigSign from(Block block) {
-        if (block.getType() != Material.SIGN &&
-                block.getType() != Material.SIGN_POST &&
-                block.getType() != Material.WALL_SIGN) {
-            throw new IllegalArgumentException("The block with material '" + block.getType().name()
-                    + "' can not be converted to a ConfigSign");
+        if (block == null || !(block.getState() instanceof Sign))
+            throw new IllegalArgumentException("Block passed is not a Sign: " +
+                    (block != null ? block.getLocation().toString() : " block is null"));
+
+        final Sign signContent = ((Sign) block.getState());
+        final BlockData data = block.getBlockData();
+        BlockFace face = null;
+
+        if (data instanceof org.bukkit.block.data.type.Sign) {
+            face = ((org.bukkit.block.data.type.Sign) data).getRotation();
+        } else if (data instanceof WallSign) {
+            face = ((WallSign) data).getFacing();
         }
 
-        Sign signContent = ((Sign) block.getState());
-        org.bukkit.material.Sign signBlock = ((org.bukkit.material.Sign) block.getState().getData());
+        if (face == null) {
+            throw new IllegalArgumentException("Sign direction cannot be determined from block: " +
+                    block.getLocation().toString());
+        }
 
-        return new ConfigSign(block.getLocation(), signContent.getLines(), signBlock.getFacing(),
-                block.getType() == Material.SIGN_POST);
+        return new ConfigSign(block.getLocation(), signContent.getLines(), face,
+                block.getType() == Material.OAK_SIGN);
     }
 
     String getLine(byte line) {

@@ -1,6 +1,4 @@
 io\teamplayer\corewars\team\DroppedCore$ReturnArea.class
-io\teamplayer\corewars\util\ReflectionUtil.class
-io\teamplayer\corewars\game\GameStateManager$GameState.class
 io\teamplayer\corewars\game\GameStateManager.class
 io\teamplayer\corewars\player\PlayerGetter.class
 io\teamplayer\corewars\scoreboard\GameFrame.class
@@ -17,6 +15,7 @@ io\teamplayer\corewars\team\DroppedCore.class
 io\teamplayer\corewars\team\CaptureDetectionArea.class
 io\teamplayer\corewars\team\Team.class
 io\teamplayer\corewars\team\StealDetectionArea.class
+io\teamplayer\corewars\game\GameStateManager$GameStage.class
 io\teamplayer\corewars\game\ClaimTask.class
 io\teamplayer\corewars\util\task\TaskTimer.class
 io\teamplayer\corewars\util\task\TimeRemainingLine.class

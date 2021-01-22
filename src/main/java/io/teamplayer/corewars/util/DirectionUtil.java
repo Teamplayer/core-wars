@@ -37,7 +37,7 @@ public final class DirectionUtil {
     private static void populate() {
 
         for (byte i = 0; i < 16; i++) {
-            final BlockFace direction = new Sign(Material.SIGN_POST, i).getFacing();
+            final BlockFace direction = new Sign(Material.LEGACY_SIGN_POST, i).getFacing();
             final float yaw = (float) ((i * 22.5) - 180);
 
             blockFaces.put(direction, yaw);

@@ -15,7 +15,7 @@ public class TeamStatusLine extends ScoreboardLine {
     public static final String NAME = "TeamStatus";
 
     private static final char ACTIVE = '◆';
-    private static final char STOLEN = '◈';
+    private static final char STOLEN = '◆';
     private static final char GONE = '◇';
 
     private final Team team;

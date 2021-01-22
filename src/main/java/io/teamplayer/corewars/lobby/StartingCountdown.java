@@ -21,16 +21,16 @@ public class StartingCountdown extends TaskTimer {
             GameStateManager.getInstance().loadMap();
         }
 
-        if (secondsLeft % 10 == 0 || secondsLeft <= 5 && secondsLeft != 0) {
+        if ((secondsLeft % 10 == 0 || secondsLeft <= 5) && secondsLeft != 0) {
             Bukkit.broadcastMessage("Starting game in " + secondsLeft + " seconds");
 
             Bukkit.getOnlinePlayers()
-                    .forEach(p -> p.playSound(p.getLocation(), Sound.BLOCK_NOTE_PLING, 1,1));
+                    .forEach(p -> p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1,1));
         }
 
         if (secondsLeft <= 3) {
             final Title title = new Title()
-                    .setDuration(20 * 1)
+                    .setDuration(20)
                     .setFadeOut(5)
                     .setTitle(ChatColor.RED.toString() + secondsLeft);
 

@@ -1,6 +1,8 @@
 package io.teamplayer.corewars.player;
 
+import com.comphenix.packetwrapper.WrapperPlayServerEntityMetadata;
 import com.comphenix.packetwrapper.WrapperPlayServerEntityStatus;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import io.teamplayer.corewars.CoreWars;
 import io.teamplayer.corewars.game.GameStateManager;
 import io.teamplayer.corewars.util.task.PlayerTaskTimer;
@@ -89,18 +91,14 @@ public class DeathHandler implements Listener {
 
     private void killEffect(CorePlayer player) {
         final Player realPlayer = player.getPlayer();
-        final long freezeTime = 1 * 20;
+        final long freezeTime = 20;
 
         realPlayer.addPotionEffect(
                 new PotionEffect(PotionEffectType.BLINDNESS, (int) freezeTime * 2, 0));
         realPlayer.playSound(realPlayer.getLocation(), Sound.ENTITY_PLAYER_DEATH, 1.4F, .8F);
 
-        player.getPlayer().getInventory().clear(); //Items will client-side drop if not cleared
         player.freezePlayer(); //We don't want the player to move during the death animation
-        //The animation needs to be delayed for a tick to ensure the player's items get cleared
-        ((TeamRunnable) () -> playFakeDeathAnimation(realPlayer))
-                .runTaskLater(CoreWars.getInstance(), 1);
-
+        playFakeDeathAnimation(realPlayer);
 
         ((TeamRunnable) () -> {
             player.hidePlayer();
@@ -114,16 +112,26 @@ public class DeathHandler implements Listener {
 
     }
 
-    /** Plays the little red falling over animation on the player for everyone but the player **/
+    /**
+     * Plays the little red falling over animation on the player for everyone but the player
+     **/
     private void playFakeDeathAnimation(Player player) {
-        WrapperPlayServerEntityStatus packet = new WrapperPlayServerEntityStatus();
+        WrapperPlayServerEntityStatus damagePacket = new WrapperPlayServerEntityStatus();
 
-        packet.setEntityID(player.getEntityId());
-        packet.setEntityStatus((byte) 3); //Entity status 3 plays the death animation
+        damagePacket.setEntityID(player.getEntityId());
+        damagePacket.setEntityStatus((byte) 2); //Status 2 is damage
+
+        //Making the client think an entity's health is 0 automatically plays death animation
+        WrapperPlayServerEntityMetadata metadataPacket = new WrapperPlayServerEntityMetadata();
+        WrappedDataWatcher metadata = new WrappedDataWatcher();
+        metadata.setObject(8, WrappedDataWatcher.Registry.get(Float.class), ((float) 0));
+        metadataPacket.setEntityID(player.getEntityId());
+        metadataPacket.setMetadata(metadata.getWatchableObjects());
 
         Bukkit.getOnlinePlayers().stream()
                 .filter(p -> !p.equals(player.getPlayer()))
-                .forEach(packet::sendPacket);
+                .forEach(metadataPacket::sendPacket);
+        damagePacket.sendPacket(player);
     }
 
     private void respawnPlayer(CorePlayer player) {

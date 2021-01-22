@@ -37,6 +37,7 @@ public abstract class MultiPlayerTaskTimer extends TaskTimer {
 
     public void removePlayer(CorePlayer player) {
         playersDoingTask.remove(player);
+        player.sendActionBarMessage("");
         updateRate();
     }
 
@@ -53,7 +54,7 @@ public abstract class MultiPlayerTaskTimer extends TaskTimer {
     }
 
     private void sendMessages() {
-        final String message = StringColorUtil.colorFromFront(this.message, getPercentComplete(),
+        final String message = StringColorUtil.colorFromFront(this.message, Math.abs(getPercentComplete()),
                 messageColor, ChatColor.WHITE, true);
 
         playersDoingTask.forEach(p -> p.sendActionBarMessage(message));

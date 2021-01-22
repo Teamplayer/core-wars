@@ -45,6 +45,10 @@ public abstract class TaskTimer {
         runnable = ((TeamRunnable) () -> {
             ticksRemaining -= decrementRate;
 
+            if (ticksRemaining > maxTicks) {
+                ticksRemaining = maxTicks;
+            }
+
             if (!shouldStillRun()) TaskTimer.this.cancel();
 
             if (ticksRemaining >= 0) {
@@ -62,6 +66,13 @@ public abstract class TaskTimer {
         }).bukkit();
 
         runnable.runTaskTimer(CoreWars.getInstance(), tickSize, tickSize);
+    }
+
+    /**
+     * Reset the task to it's starting state
+     */
+    public void reset() {
+        ticksRemaining = maxTicks;
     }
 
     public void cancel() {

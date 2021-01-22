@@ -34,7 +34,7 @@ class CorePedestal {
         lastHeld = newCore;
 
         final Location floatingLoc = location.mutable();
-        floatingLoc.add(0,.5,0);
+        floatingLoc.add(0,1.5,0);
         floatingCore = new FloatingCore(floatingLoc, newCore);
     }
 
@@ -59,4 +59,13 @@ class CorePedestal {
         return lastHeld;
     }
 
+    @Override
+    public String toString() {
+        return "CorePedestal{" +
+                "location=" + location +
+                ", floatingCore=" + floatingCore +
+                ", holdingCore=" + holdingCore +
+                ", lastHeld=" + lastHeld +
+                '}';
+    }
 }

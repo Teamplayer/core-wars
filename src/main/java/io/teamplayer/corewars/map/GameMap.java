@@ -115,13 +115,13 @@ public class GameMap {
 
             final Set<ImmutableLocation> fireworkLocations = toLocations.apply(LocationType.FIREWORK);
 
-            final Set<Block> chest = toBlocks.apply(LocationType.CORE);
+            final Set<Block> cores = toBlocks.apply(LocationType.CORE);
             final Set<Block> bannerBlocks = toBlocks.apply(LocationType.BANNER);
 
             final Set<Block> coloredBlocks = toAttached.apply(LocationType.COLORED);
             final Set<Block> startingBarriers = toAttached.apply(LocationType.BARRIER);
 
-            teamData.add(new TeamData(spawnLocation,coloredBlocks,chest, fireworkLocations, startingHolo,
+            teamData.add(new TeamData(spawnLocation,coloredBlocks,cores, fireworkLocations, startingHolo,
                     startingBarriers, bannerBlocks,captureArea));
         }
 

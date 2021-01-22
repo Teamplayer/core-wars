@@ -25,18 +25,20 @@ public class DroppedCore {
     private final CaptureArea captureArea;
     private final ReturnArea returnArea;
     private final Hologram hologram;
+    private final FloatingCore floatingCore;
 
     public DroppedCore(RespawnCore core, Location location) {
         this.core = core;
         this.team = core.getOwningTeam();
         this.location = ImmutableLocation.from(location);
+        this.floatingCore = new FloatingCore(location.add(0, 1, 0), core);
 
         captureArea = new CaptureArea();
         returnArea = new ReturnArea();
 
         final TeamType type = team.getType();
 
-        hologram = new Hologram(location.add(0, 1.5, 0),
+        hologram = new Hologram(this.location.mutable().add(0, 1, 0),
                 type.getChatColor() + ChatColor.BOLD.toString() + type.name() +
                         " TEAM'S CORE");
         hologram.spawn();
@@ -46,6 +48,7 @@ public class DroppedCore {
         captureArea.disable();
         returnArea.disable();
         hologram.destroy();
+        floatingCore.destroy();
 
         return core;
     }

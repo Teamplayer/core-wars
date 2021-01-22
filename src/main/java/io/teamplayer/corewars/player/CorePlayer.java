@@ -1,16 +1,21 @@
 package io.teamplayer.corewars.player;
 
+import com.comphenix.packetwrapper.WrapperPlayServerChat;
+import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import io.teamplayer.corewars.CoreWars;
 import io.teamplayer.corewars.game.GameStateManager;
 import io.teamplayer.corewars.team.DroppedCore;
 import io.teamplayer.corewars.team.RespawnCore;
 import io.teamplayer.corewars.team.Team;
 import io.teamplayer.corewars.util.ItemUtil;
-import net.minecraft.server.v1_11_R1.ChatComponentText;
-import net.minecraft.server.v1_11_R1.Packet;
-import net.minecraft.server.v1_11_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_16_R3.ChatComponentText;
+import net.minecraft.server.v1_16_R3.ChatMessageType;
+import net.minecraft.server.v1_16_R3.Packet;
+import net.minecraft.server.v1_16_R3.PacketPlayOutChat;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -81,7 +86,10 @@ public class CorePlayer {
      * @param message the message to send
      */
     public void sendActionBarMessage(String message) {
-        sendPacket(new PacketPlayOutChat(new ChatComponentText(message), (byte) 2));
+        final WrapperPlayServerChat packet = new WrapperPlayServerChat();
+        packet.setChatType(EnumWrappers.ChatType.GAME_INFO);
+        packet.setMessage(WrappedChatComponent.fromText(message));
+        packet.sendPacket(player);
     }
 
     /**
@@ -108,7 +116,7 @@ public class CorePlayer {
         if (!visible) return;
         visible = false;
 
-        Bukkit.getOnlinePlayers().forEach(p -> p.hidePlayer(player));
+        Bukkit.getOnlinePlayers().forEach(p -> p.hidePlayer(CoreWars.getInstance(), player));
     }
 
     /** Reveal this player to all other players if this player is hidden */
@@ -116,7 +124,7 @@ public class CorePlayer {
         if (visible) return;
         visible = true;
 
-        Bukkit.getOnlinePlayers().forEach(p -> p.showPlayer(player));
+        Bukkit.getOnlinePlayers().forEach(p -> p.showPlayer(CoreWars.getInstance(), player));
     }
 
     /** Whether or not this player can be seen by other players */
@@ -189,8 +197,7 @@ public class CorePlayer {
     public void equipCore(RespawnCore newCore) {
         holdingCore = newCore;
 
-        player.getInventory().setHelmet(new ItemStack(Material.WOOL, 1,
-                newCore.getVisualTeam().getType().getData()));
+        player.getInventory().setHelmet(new ItemStack(getTeam().getType().getWoolType()));
     }
 
     /**

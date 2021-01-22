@@ -12,9 +12,10 @@ import io.teamplayer.corewars.util.task.TaskTimer;
 import io.teamplayer.corewars.util.task.TimeRemainingLine;
 import io.teamplayer.teamcore.message.Title;
 import io.teamplayer.teamcore.util.TeamRunnable;
-import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
@@ -48,10 +49,15 @@ public final class GameStateManager {
         for (CorePlayer player : PlayerGetter.getActivePlayers()) {
             player.getPlayer().getInventory().clear();
             player.giveItems();
+            player.getPlayer().setGameMode(GameMode.ADVENTURE);
 
             if (player.hasTeam()) {
                 player.getPlayer().teleport(player.getTeam().getSpawn());
             }
+        }
+
+        for (Team team : teamManager.getActiveTeams()) {
+            team.dropBarriers();
         }
 
         final Title title = new Title()
@@ -68,7 +74,7 @@ public final class GameStateManager {
 
         CoreWars.getInstance().getScoreboardManager().setGlobalFrame(new GameFrame());
 
-        gameTask = new ClaimTask();
+        nextTask();
     }
 
     /** Check to see if all but one team is eliminated */
@@ -105,6 +111,7 @@ public final class GameStateManager {
 
         if (teamsWithCores.size() > 0) {
             gameTask = new ClaimTask();
+            countdownLine.setLinkedTask(gameTask);
         }
     }
 

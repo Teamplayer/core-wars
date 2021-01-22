@@ -5,7 +5,7 @@ import io.teamplayer.corewars.lobby.CountdownManager;
 import io.teamplayer.corewars.player.PlayerGetter;
 import io.teamplayer.teamcore.scoreboard.ScoreboardFrame;
 import io.teamplayer.teamcore.scoreboard.ScoreboardLine;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 
 /**
@@ -29,7 +29,7 @@ public class LobbyFrame extends ScoreboardFrame {
                     return "Starting in " + CoreWars.PRI_COLOR + timeLeft + 's';
 
                 } else {
-                    return "Waiting" + StringUtils.repeat('.', (int) (animationCycle % 4));
+                    return "Waiting" + StringUtils.repeat(".", (int) (animationCycle % 4));
                 }
             }
         });

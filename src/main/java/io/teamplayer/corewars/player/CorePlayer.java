@@ -197,7 +197,7 @@ public class CorePlayer {
     public void equipCore(RespawnCore newCore) {
         holdingCore = newCore;
 
-        player.getInventory().setHelmet(new ItemStack(getTeam().getType().getWoolType()));
+        player.getInventory().setHelmet(new ItemStack(newCore.getOwningTeam().getType().getWoolType()));
     }
 
     /**

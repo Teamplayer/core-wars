@@ -4,12 +4,13 @@ import io.teamplayer.corewars.player.CorePlayer;
 import io.teamplayer.corewars.util.BlockFindingUtil;
 import io.teamplayer.corewars.util.LocationArea;
 import io.teamplayer.corewars.util.LocationUtil;
+import io.teamplayer.teamcore.util.ColoredBlockUtil;
 import org.apache.commons.lang.ArrayUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -54,7 +55,9 @@ public class Team {
         teamData.getColoredBlocks().stream()
                 .map(BlockFindingUtil::findExact)
                 .flatMap(Collection::stream)
-                .forEach(b -> b.setType(teamType.getWoolType()));
+                .forEach(b ->
+                    b.setType(ColoredBlockUtil.transformMaterialColor(b.getType(), teamType.getDyeColor())
+                            .orElse(Material.WHITE_WOOL)));
 
         stealDetectionArea = new StealDetectionArea(teamData.getCaptureArea(), this);
         returnArea = new CaptureDetectionArea(teamData.getCaptureArea(), this);

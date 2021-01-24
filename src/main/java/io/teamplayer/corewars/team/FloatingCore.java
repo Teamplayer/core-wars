@@ -3,6 +3,7 @@ package io.teamplayer.corewars.team;
 import com.comphenix.packetwrapper.WrapperPlayServerEntityLook;
 import io.teamplayer.corewars.CoreWars;
 import io.teamplayer.teamcore.immutable.ImmutableLocation;
+import io.teamplayer.teamcore.util.ColoredBlockUtil;
 import io.teamplayer.teamcore.util.TeamRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -13,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The object responsible for a little floating wool block that visually represents a RespawnCore
@@ -56,7 +58,10 @@ class FloatingCore {
         armorStand = ((ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND));
 
         armorStand.setVisible(false);
-        armorStand.setHelmet(new ItemStack(respawnCore.getVisualTeam().getType().getWoolType()));
+
+        Optional<Material> coreMaterial = ColoredBlockUtil.transformMaterialColor(Material.WHITE_WOOL,
+                respawnCore.getVisualTeam().getType().getDyeColor());
+        armorStand.getEquipment().setHelmet(new ItemStack(coreMaterial.orElse(Material.WHITE_WOOL)));
 
         floatingCores.add(this);
     }

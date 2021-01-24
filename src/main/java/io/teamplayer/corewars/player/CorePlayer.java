@@ -9,10 +9,8 @@ import io.teamplayer.corewars.team.DroppedCore;
 import io.teamplayer.corewars.team.RespawnCore;
 import io.teamplayer.corewars.team.Team;
 import io.teamplayer.corewars.util.ItemUtil;
-import net.minecraft.server.v1_16_R3.ChatComponentText;
-import net.minecraft.server.v1_16_R3.ChatMessageType;
+import io.teamplayer.teamcore.util.ColoredBlockUtil;
 import net.minecraft.server.v1_16_R3.Packet;
-import net.minecraft.server.v1_16_R3.PacketPlayOutChat;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
@@ -196,8 +194,9 @@ public class CorePlayer {
      */
     public void equipCore(RespawnCore newCore) {
         holdingCore = newCore;
-
-        player.getInventory().setHelmet(new ItemStack(newCore.getOwningTeam().getType().getWoolType()));
+        Optional<Material> material = ColoredBlockUtil.transformMaterialColor(Material.WHITE_WOOL,
+                newCore.getOwningTeam().getType().getDyeColor());
+        player.getInventory().setHelmet(new ItemStack(material.orElse(Material.WHITE_WOOL)));
     }
 
     /**
